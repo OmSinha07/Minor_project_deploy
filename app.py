@@ -3,7 +3,8 @@ from flask import Flask, request, jsonify, render_template
 import pickle,joblib
 
 # Create flask app
-flask_app = Flask(__name__)
+app = Flask(__name__)  
+
 model = pickle.load(open("best_model.pkl", "rb"))
 try:
     scaler = joblib.load("scaler.pkl")
