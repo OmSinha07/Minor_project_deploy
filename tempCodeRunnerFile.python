@@ -1,0 +1,52 @@
+def solve():
+    import sys
+    input = sys.stdin.read
+    data = input().split()
+    
+    n, k = map(int, data[:2])
+    grid = []
+    idx = 2
+    for _ in range(n):
+        grid.append(list(map(int, data[idx:idx+3])))
+        idx += 3
+
+    from collections import defaultdict
+    dp = [defaultdict(lambda: -float('inf')) for _ in range(n+1)]
+    dp[0][(0, 0)] = 0  # (mask, tiles_used) -> sum
+
+    for i in range(n):
+        for (mask, tiles_used), val in dp[i].items():
+            # 1. Move without placing any tile
+            dp[i+1][(0, tiles_used)] = max(dp[i+1][(0, tiles_used)], val)
+
+            # Try to place tiles in this row
+
+            # Try horizontal placements
+            for j in range(2):
+                if not (mask & (1 << j)) and not (mask & (1 << (j+1))):
+                    if tiles_used + 1 <= k:
+                        new_mask = mask | (1 << j) | (1 << (j+1))
+                        add_val = grid[i][j] + grid[i][j+1]
+                        dp[i][(new_mask, tiles_used + 1)] = max(
+                            dp[i][(new_mask, tiles_used + 1)],
+                            val + add_val
+                        )
+
+            # Try vertical placements (to next row)
+            if i+1 < n:
+                for j in range(3):
+                    if not (mask & (1 << j)):
+                        if tiles_used + 1 <= k:
+                            add_val = grid[i][j] + grid[i+1][j]
+                            new_mask = mask | (1 << j)
+                            dp[i+1][(1 << j, tiles_used + 1)] = max(
+                                dp[i+1][(1 << j, tiles_used + 1)],
+                                val + add_val
+                            )
+
+    # Get the maximum value after all rows with exactly k tiles used
+    ans = -float('inf')
+    for (mask, tiles_used), val in dp[n].items():
+        if tiles_used == k:
+            ans = max(ans, val)
+    print(ans)
