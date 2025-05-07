@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preterm Birth Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: linear-gradient(to right, #a8c0ff, #3f2b96);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            width: 50%;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+            text-align: left;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 12px;
+            border: none;
+            width: 100%;
+            margin-top: 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .prediction-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            display: none; /* By default hidden */
+        }
+        @media (max-width: 768px) {
+            .container {
+                width: 80%;
+                padding: 20px;
+            }
+        }
+        @media (max-width: 480px) {
+            .container {
+                width: 95%;
+                padding: 15px;
+            }
+            button {
+                font-size: 14px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Preterm Birth Prediction Form</h2>
+        <form action="/predict" method="post">
+            <label for="count_contraction">Count Contraction:</label>
+            <input type="number" id="count_contraction" name="count_contraction" required>
+        
+            <label for="entropy">Entropy:</label>
+            <input type="number" step="any" id="entropy" name="entropy" required>
+        
+            <label for="contraction_times">Contraction Times:</label>
+            <input type="number" step="any" id="contraction_times" name="contraction_times" required>
+        
+            <label for="risk_factor">Risk Factor Score:</label>
+            <input type="number" step="any" id="risk_factor" name="risk_factor" required>
+        
+            <label for="minor_health">Minor Health Indicator:</label>
+            <input type="number" step="any" id="minor_health" name="minor_health" required>
+        
+            <label for="lifestyle_factor">Lifestyle Factor:</label>
+            <input type="number" step="any" id="lifestyle_factor" name="lifestyle_factor" required>
+        
+            <button type="submit">Predict</button>
+        </form>
+        
+
+        {% if prediction_text %}
+        <div class="prediction-box">
+            {{ prediction_text }}
+        </div>
+        <script>
+            document.querySelector(".prediction-box").style.display = "block";
+        </script>
+        {% endif %}
+    </div>
+</body>
+</html>
