@@ -1,21 +1,22 @@
 import numpy as np
 from flask import Flask, request, jsonify, render_template
-import pickle,joblib
+import pickle, joblib
 
-# Create flask app
-app = Flask(__name__)  
-
+# Create Flask app
+app = Flask(__name__)
 model = pickle.load(open("best_model.pkl", "rb"))
+
 try:
     scaler = joblib.load("scaler.pkl")
     print("Scaler Loaded Successfully")
 except Exception as e:
     print("Scaler Loading Error:", e)
-@flask_app.route("/")
+
+@app.route("/")
 def Home():
     return render_template("index.html")
 
-@flask_app.route("/predict", methods=["POST"])
+@app.route("/predict", methods=["POST"])
 def predict():
     try:
         # Debugging: Print input data
@@ -45,6 +46,6 @@ def predict():
     except Exception as e:
         print("Error in Prediction:", e)
         return render_template("index.html", prediction_text="Error in prediction!")
-    
+
 if __name__ == "__main__":
-    flask_app.run(debug=True)
+    app.run(debug=True)
